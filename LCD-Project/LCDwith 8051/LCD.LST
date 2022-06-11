@@ -1,0 +1,157 @@
+C51 COMPILER V9.60.0.0   LCD                                                               12/30/2020 19:37:18 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE LCD
+OBJECT MODULE PLACED IN LCD.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE LCD.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          
+   2          #include<reg51.h>
+   3          
+   4          //Function declarations
+   5          void cct_init(void);
+   6          void delay(int);
+   7          void lcdinit(void);
+   8          void writecmd(int);
+   9          void writedata(char);
+  10          void ReturnHome(void);
+  11          
+  12          //*******************
+  13          //Pin description
+  14          /*
+  15          P2 is data bus
+  16          P1.0 is RS
+  17          P1.1 is E
+  18          */
+  19          //********************
+  20          
+  21          // Defines Pins
+  22          sbit RS = P1^0;
+  23          sbit E  = P1^1;
+  24          
+  25          // ***********************************************************
+  26          // Main program
+  27          //
+  28          void main(void)
+  29          {
+  30   1         cct_init();                                     //Make all ports zero
+  31   1      
+  32   1         lcdinit();                                      //Initilize LCD
+  33   1      
+  34   1         writecmd(0x81);
+  35   1         writedata('A');                                 //write
+  36   1         writedata('l');                                 //write
+  37   1         writedata('I');                                 //write
+  38   1         writedata(' ');                                 //write
+  39   1         writedata(' ');                                 //write
+  40   1         writedata(' ');                                 //write
+  41   1         writedata('S');                                 //write
+  42   1         writedata('U');                                 //write
+  43   1         writedata('B');                                 //write
+  44   1         writedata('H');                                 //write
+  45   1         writedata('A');                                 //write
+  46   1         writedata('N');                                 //write
+  47   1         writedata(' ');
+  48   1        
+  49   1         writecmd(0xc0);
+  50   1      
+  51   1         writedata('M');                                 //write
+  52   1         writedata('A');                                 //write
+  53   1         writedata('J');                                 //write
+  54   1         writedata('I');                                 //write
+  55   1         writedata('D');                                 //write
+C51 COMPILER V9.60.0.0   LCD                                                               12/30/2020 19:37:18 PAGE 2   
+
+  56   1         writedata(' ');                                 //write
+  57   1         writedata('A');                                 //write
+  58   1         writedata('H');                                 //write
+  59   1         writedata('M');                                 //write
+  60   1         writedata('A');                                 //write
+  61   1         writedata('D');                                 //write
+  62   1         writedata(' ');                                 //write
+  63   1      
+  64   1         ReturnHome();                                   //Return to 0 position
+  65   1      
+  66   1        while(1)
+  67   1        {
+  68   2        }
+  69   1      
+  70   1      }
+  71          
+  72          
+  73          void cct_init(void)
+  74          {
+  75   1      P0 = 0x00;   //not used 
+  76   1      P1 = 0x00;   //not used 
+  77   1      P2 = 0x00;   //used as data port
+  78   1      P3 = 0x00;   //used for generating E and RS
+  79   1      }
+  80          
+  81          void delay(int a)
+  82          {
+  83   1         int i;
+  84   1         for(i=0;i<a;i++);   //null statement
+  85   1      }
+  86          
+  87          void writedata(char t)
+  88          {
+  89   1         RS = 1;             // => RS = 1
+  90   1         P2 = t;             //Data transfer
+  91   1         E  = 1;             // => E = 1
+  92   1         delay(150);
+  93   1         E  = 0;             // => E = 0
+  94   1         delay(150);
+  95   1      }
+  96          
+  97          
+  98          void writecmd(int z)
+  99          {
+ 100   1         RS = 0;             // => RS = 0
+ 101   1         P2 = z;             //Data transfer
+ 102   1         E  = 1;             // => E = 1
+ 103   1         delay(150);
+ 104   1         E  = 0;             // => E = 0
+ 105   1         delay(150);
+ 106   1      }
+ 107          
+ 108          void lcdinit(void)
+ 109          {
+ 110   1        ///////////// Reset process from datasheet /////////
+ 111   1           delay(15000);
+ 112   1         writecmd(0x30);
+ 113   1           delay(4500);
+ 114   1         writecmd(0x30);
+ 115   1           delay(300);
+ 116   1         writecmd(0x30);
+ 117   1           delay(650);
+C51 COMPILER V9.60.0.0   LCD                                                               12/30/2020 19:37:18 PAGE 3   
+
+ 118   1        /////////////////////////////////////////////////////
+ 119   1         writecmd(0x38);    //function set
+ 120   1         writecmd(0x0c);    //display on,cursor off,blink off
+ 121   1         writecmd(0x01);    //clear display
+ 122   1         writecmd(0x06);    //entry mode, set increment
+ 123   1         
+ 124   1      }
+ 125          
+ 126          void ReturnHome(void)     //Return to 0 location
+ 127          {
+ 128   1        writecmd(0x02);
+ 129   1          delay(1500);
+ 130   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    295    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
